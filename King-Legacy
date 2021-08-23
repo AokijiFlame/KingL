@@ -1,0 +1,33 @@
+local TS = game:GetService("TweenService")
+
+function tping(to, speed)
+    local distance = (to.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+    local speed = distance / tonumber(speed)
+    mainTween = TS:Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new(speed,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{
+        CFrame = to.CFrame
+    })
+    mainTween:Play()
+end
+
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreenDeno/Venyx-UI-Library/main/source.lua"))()
+local venyx = library.new("Venyx", 5013109572)
+
+local main = venyx:addPage("Test", 5012544693)
+local tele = venyx:addPage("Teleports", 5012544693)
+
+t1 = tele:addSection("Teleports")
+islands = {}
+for i,v in pairs(game.Workspace.Areas:GetChildren()) do
+    if not table.find(islands, v.Name) then
+        table.insert(islands, v.Name)
+        table.sort(islands)
+    end
+end
+
+t1:addDropdown("Select Island", islands, function(v)
+    getgenv().islands = v 
+end)
+
+t1:addButton("Teleport", function(v)
+    tping(game.Workspace.Areas[getgenv().islands], 200)
+end)
